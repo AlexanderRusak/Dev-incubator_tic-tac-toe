@@ -1,11 +1,12 @@
 import { Fragment } from 'react';
 import './App.css';
+import { Board } from './components/Board';
 
 function App() {
   return (
-   <Fragment>
-     <h1>3</h1>
-   </Fragment>
+    <Fragment>
+      <Board />
+    </Fragment>
   );
 }
 
