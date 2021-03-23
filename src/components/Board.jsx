@@ -20,7 +20,7 @@ export const Board = () => {
             <div className="board-now">
                 {renderSquare(3)}
                 {renderSquare(4)}
-                {renderSquare(5)}
+                {renderSquare(5)} 
             </div>
             <div className="board-now">
                 {renderSquare(6)}
