@@ -1,4 +1,5 @@
 import { Component } from "react";
+import classes from "./Game.module.css"
 import Board from "../Board/Board";
 
 
@@ -90,7 +91,7 @@ export default class Game extends Component {
         }
 
         return (
-            <div className="game">
+            <div className={classes.Game}>
                 <div className="game-board">
                     <Board
                         squares={current.squares}
