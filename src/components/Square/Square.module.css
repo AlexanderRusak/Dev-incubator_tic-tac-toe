@@ -1,0 +1,7 @@
+.Square{
+   width: 100px;
+   height: 100px;
+}
+.Square .text{
+    font-size: 2rem;
+}

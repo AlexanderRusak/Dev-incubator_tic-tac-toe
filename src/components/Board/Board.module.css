@@ -1,0 +1,15 @@
+.Board {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+}
+
+.Board .square {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.Board .status{
+    text-align: center;
+    width: 30%;
+}
