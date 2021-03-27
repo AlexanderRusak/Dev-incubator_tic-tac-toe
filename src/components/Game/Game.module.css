@@ -1,4 +1,19 @@
 .Game {
   width: 300px;
-
+}
+.Game .mode h5 {
+  font-size: 2rem;
+  text-align: center;
+}
+.Game .moves{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.Game .moves p{
+  font-size: 1.5rem;
+}
+.Game .moves button{
+  font-size: 3rem;
 }

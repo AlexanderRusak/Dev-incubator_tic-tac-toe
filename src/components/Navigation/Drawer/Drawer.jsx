@@ -3,17 +3,18 @@ import Backdrop from "../../UI/Backdrop/Backdrop";
 import classes from "./Drawer.module.css";
 
 
-const links = [1, 2, 3];
+const links = ["Single player", "Multiplayer", "Score"];
 
 export default class Drawer extends Component {
+
 
 
 
     renderLinks() {
         return links.map((link, index) => {
             return (
-                <li key={index}>
-                    <a>Link {link}</a>
+                <li onClick={()=>this.props.onChose(index)} key={index}>
+                    <p>{link}</p>
                 </li>
             )
         })
@@ -21,7 +22,6 @@ export default class Drawer extends Component {
 
     render() {
         const cls = [classes.Drawer];
-
         if (!this.props.isOpen) {
             cls.push(classes.close);
         }

@@ -24,7 +24,7 @@
 .Drawer ul li {
   margin-bottom: 15px;
 }
-.Drawer ul li a {
+.Drawer ul li p {
   color: black;
   font-size: 2rem;
   text-decoration: none;
@@ -33,7 +33,6 @@
   padding: 0 20px 10px 20px;
   transition: opacity 0.3s;
 }
-.Drawer ul li a:hover,
-:active {
+.Drawer ul li p:hover {
   opacity: 0.7;
 }

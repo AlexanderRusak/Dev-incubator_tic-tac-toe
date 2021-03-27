@@ -10,8 +10,10 @@ export default class Game extends Component {
             history: [{
                 squares: Array(9).fill(null),
             }],
-            isCross: true,
             stepNumber: 0,
+            isCross: true,
+            mode: this.props.mode,
+            moveCount: 0
         }
     }
 
@@ -21,27 +23,70 @@ export default class Game extends Component {
             isCross: (step % 2) === 0,
         });
     }
+    historyButtons(move) {
+        const { history, stepNumber, moveCount, mode } = this.state;
+        this.showNextButton();
+        this.setState({
+            stepNumber: move,
+            isCross: mode === 0 ? "X": !this.state.isCross,
+            moveCount: move,
+        })
+    }
+
+    showNextButton() {
+        const { history, stepNumber, moveCount, mode } = this.state;
+        console.log(stepNumber < history.length, stepNumber, history.length);
+        /* moveCount < history.length - 1 */
+    }
+
 
     moveClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1]
         const squares = current.squares.slice();
-
+        const { mode } = this.state;
+        console.log(this.state.stepNumber < history.length - 1, this.state.stepNumber, history.length);
         if (this.calculateWinner(squares) || squares[i]) {
             return;
         }
-        squares[i] = this.state.isCross ? 'X' : 'O';
-        console.log(squares, i);
-        this.setState({
-            history: history.concat([{
-                squares: squares
-            }]),
-            stepNumber: history.length,
-            isCross: !this.state.isCross
-        });
-        console.log(this.state);
+        if (mode === 0) {
+            let move = this.moveClickAI();
+
+            while (squares[move] !== null) {
+
+                move = this.moveClickAI();
+            }
+            squares[i] = 'X';
+            this.calculateWinner(squares);
+            squares[move] = 'O';
+            this.calculateWinner(squares);
+
+            this.setState({
+                history: history.concat([{
+                    squares: squares
+                }]),
+                stepNumber: history.length,
+                isCross: !this.state.isCross,
+                moveCount: this.state.moveCount + 1
+            });
+        } else {
+            squares[i] = this.state.isCross ? 'X' : 'O';
+            this.setState({
+                history: history.concat([{
+                    squares: squares
+                }]),
+                stepNumber: history.length,
+                isCross: !this.state.isCross,
+                moveCount: this.state.moveCount + 1
+            });
+        }
+
+
     }
 
+    moveClickAI() {
+        return Math.floor(Math.random() * (8 - 0 + 1)) + 0;
+    }
 
     calculateWinner(squares) {
 
@@ -67,12 +112,29 @@ export default class Game extends Component {
         }
         return null;
     }
-    render() {
-        const history = this.state.history;
-        const current = history[history.length - 1];
-        const winner = this.calculateWinner(current.squares);
+    componentDidUpdate(prevProps) {
 
-        const moves = history.map((step, move) => {
+        const newHistory = [{
+            squares: Array(9).fill(null),
+        }];
+        if (this.props.mode !== prevProps.mode) {
+            this.setState({
+                mode: this.props.mode,
+                history: [...newHistory],
+                stepNumber: 0,
+                moveCount: 0,
+                isCross: true,
+            })
+        }
+    }
+
+    render() {
+        const { mode, history, stepNumber, moveCount } = this.state;
+        const current = history[stepNumber];
+        const winner = this.calculateWinner(current.squares);
+        const count = history.length;
+        const modeTitle = mode ? "Multyplayer" : "SinglePlayer";
+        /* const moves = history.map((_, move) => {
             const desc = move ?
                 "Go to turn #" + move :
                 "To the start of the Game";
@@ -81,7 +143,7 @@ export default class Game extends Component {
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
             )
-        })
+        }) */
 
         let status;
         if (winner) {
@@ -92,16 +154,22 @@ export default class Game extends Component {
 
         return (
             <div className={classes.Game}>
-                <div className="game-board">
+                <div className={classes.mode}>
+                    <h5>{modeTitle}</h5>
+                </div>
+
+                <div >
+                <div className={classes.moves}>
+                    <button disabled={moveCount === 0} onClick={() => this.historyButtons(moveCount - 1)}><i class="fas fa-undo"></i></button>
+                    <p>{status}</p>
+                    <button disabled={stepNumber >= history.length - 1} onClick={() => this.historyButtons(moveCount + 1)} ><i class="fas fa-redo"></i></button>
+                </div>
                     <Board
                         squares={current.squares}
                         onClick={(i) => this.moveClick(i)}
                     />
                 </div>
-                <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
-                </div>
+
             </div>
         )
     }
