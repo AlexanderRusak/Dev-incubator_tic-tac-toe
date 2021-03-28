@@ -22,6 +22,9 @@ export default class Layout extends Component {
         this.setState({ menu: !this.state.menu })
     }
     modeHandler = selectedMode => {
+        if (selectedMode === 2) {
+            selectedMode = 0;
+        }
         this.setState(() => {
             return { mode: selectedMode, menu: !this.state.menu }
         })
