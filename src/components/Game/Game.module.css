@@ -5,15 +5,29 @@
   font-size: 2rem;
   text-align: center;
 }
-.Game .moves{
+.Game .moves {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
-.Game .moves p{
+.Game .mode p {
   font-size: 1.5rem;
+  text-align: center;
 }
-.Game .moves button{
+.Game .moves button {
   font-size: 3rem;
+}
+.Game .score{
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Game .score button{
+  width: 80px;
+  height: 80px;
+}
+.Game .score button i{
+  font-size: 2.5rem;
 }
