@@ -21,7 +21,7 @@
 .Game .score{
   margin-top: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .Game .score button{

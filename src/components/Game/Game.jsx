@@ -14,15 +14,11 @@ export default class Game extends Component {
             isCross: true,
             mode: this.props.mode,
             moveCount: 0,
-
+            isWinner: false,
+            winner: null,
         }
     }
-    jumpTo(step) {
-        this.setState({
-            stepNumber: step,
-            isCross: (step % 2) === 0,
-        });
-    }
+
     historyButtons(move) {
         const { mode, isCross } = this.state;
         this.showNextButton();
@@ -33,7 +29,10 @@ export default class Game extends Component {
         })
     }
 
-
+    showNextButton() {
+        const { history, stepNumber } = this.state;
+        console.log(stepNumber < history.length, stepNumber, history.length);
+    }
     resetHandler() {
         const newHistory = [{
             squares: Array(9).fill(null),
@@ -45,6 +44,8 @@ export default class Game extends Component {
             stepNumber: 0,
             moveCount: 0,
             isCross: true,
+            winner: null,
+            isWinner: false
         })
 
     }
@@ -54,19 +55,21 @@ export default class Game extends Component {
         const current = history[history.length - 1]
         const squares = current.squares.slice();
         const { mode } = this.state;
-        if (this.calculateWinner(squares) || squares[i]) {
-            return;
-        }
+
         if (mode === 0) {
             let move = this.moveClickAI();
             squares[i] = 'X';
-
-            while (squares[move] !== null || squares[move] === "X") {
-                console.log(move);
-                move = this.moveClickAI();
-                console.log(move);
+            console.log(squares.find(square => square === null) === null);
+            if (squares.find(square => square === null) === null) {
+                while (squares[move] !== null || squares[move] === "X") {
+                    console.log(move);
+                    move = this.moveClickAI();
+                    console.log(move);
+                }
+                squares[move] = 'O';
             }
-            squares[move] = 'O';
+
+
 
             this.setState({
                 history: history.concat([{
@@ -88,7 +91,9 @@ export default class Game extends Component {
             });
         }
 
-
+        if (this.calculateWinner(squares) || squares[i]) {
+            return;
+        }
     }
 
     moveClickAI() {
@@ -97,7 +102,6 @@ export default class Game extends Component {
     }
 
     calculateWinner(squares) {
-
         const lines = [
             [0, 1, 2],
             [3, 4, 5],
@@ -111,14 +115,37 @@ export default class Game extends Component {
         for (let i = 0; i < lines.length; i++) {
             const [a, b, c] = lines[i];
             if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-
-                // this.setScoreResult(squares[a]);
+                this.setState({
+                    isWinner: true,
+                    winner: squares[a]
+                })
+                this.setScoreResult(squares[a]);
                 return squares[a];
             }
         }
         return null;
     }
 
+
+    getTemplate() {
+        const sp = "SinglePlayer";
+        const mp = "MultyPlayer";
+        const emptyData = "X-0, O-0";
+        const dataMp = JSON.parse(localStorage.getItem(mp));
+        const dataSp = JSON.parse(localStorage.getItem(sp));
+        let res = `${dataSp ?
+            `${sp} :X-${dataSp.X}, O-${dataSp.O}` :
+            `${sp} :${emptyData}`}`;
+        res += `${dataMp ?
+            `${mp} :X-${dataMp.X}, O-${dataMp.O}` :
+            `${mp} :${emptyData}`}`;
+    }
+
+    onRemove() {
+        localStorage.removeItem("SinglePlayer");
+        localStorage.removeItem("MultyPlayer");
+        alert("Data successfully erased");
+    }
     setScoreResult(winner) {
         const { mode } = this.state;
         const modeKey = mode === 0 ? "SinglePlayer" : "MultyPlayer";
@@ -147,21 +174,26 @@ export default class Game extends Component {
                 stepNumber: 0,
                 moveCount: 0,
                 isCross: true,
+                isWinner: false,
+                winner: null
             })
         }
     }
 
     render() {
-        const { mode, history, stepNumber, moveCount } = this.state;
-        console.log("render");
+        const { mode, history, stepNumber, moveCount, winner } = this.state;
         const current = history[stepNumber];
-        const winner = this.calculateWinner(current.squares);
-        winner && this.setScoreResult(winner);
+        const { squares } = history[stepNumber];
+
+
         const modeTitle = mode ? "Multyplayer" : "SinglePlayer";
         let status;
         if (winner) {
             status = 'Win ' + winner;
-        } else {
+        } else if (squares.find(square => square === null) !== null && !winner) {
+            status = "Round draw";
+        }
+        else {
             status = 'Next move: ' + (this.state.isCross ? 'X' : 'O');
         }
 
@@ -184,7 +216,8 @@ export default class Game extends Component {
                     />
                 </div>
                 <div className={classes.score}>
-                    <button onClick={this.props.onScore}><i class="far fa-star"></i></button>
+                    <button onClick={this.props.onScore}><i className="far fa-star"></i></button>
+                    <button onClick={this.onRemove}><i className="far fa-trash-alt"></i></button>
                 </div>
             </div>
         )
