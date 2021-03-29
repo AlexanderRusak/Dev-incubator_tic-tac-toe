@@ -10,7 +10,6 @@ export default class Board extends Component {
     }
 
     render() {
-
         return (
             <div className={classes.Board}>
 

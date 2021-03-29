@@ -4,9 +4,7 @@ import Layout from './components/hoc/Layout';
 
 function App() {
   return (
-    <Layout>
-
-    </Layout>
+    <Layout />
   );
 }
 

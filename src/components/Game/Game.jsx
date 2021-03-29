@@ -24,11 +24,11 @@ export default class Game extends Component {
         });
     }
     historyButtons(move) {
-        const { mode } = this.state;
+        const { mode, isCross } = this.state;
         this.showNextButton();
         this.setState({
             stepNumber: move,
-            isCross: mode === 0 ? "X" : !this.state.isCross,
+            isCross: mode === 0 ? "X" : !isCross,
             moveCount: move,
         })
     }
@@ -157,7 +157,6 @@ export default class Game extends Component {
         const current = history[stepNumber];
         const winner = this.calculateWinner(current.squares);
         winner && this.setScoreResult(winner);
-        const count = history.length;
         const modeTitle = mode ? "Multyplayer" : "SinglePlayer";
         let status;
         if (winner) {
