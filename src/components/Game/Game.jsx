@@ -197,7 +197,7 @@ export default class Game extends Component {
                     </div>
                     <Board
                         squares={current.squares}
-                        onClick={(i) => this.moveClick(i)}
+                        onClick={!winner ? (i) => this.moveClick(i) : null}
                     />
                 </div>
                 <div className={classes.score}>
