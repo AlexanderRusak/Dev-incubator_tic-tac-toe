@@ -126,21 +126,6 @@ export default class Game extends Component {
         return null;
     }
 
-
-    getTemplate() {
-        const sp = "SinglePlayer";
-        const mp = "MultyPlayer";
-        const emptyData = "X-0, O-0";
-        const dataMp = JSON.parse(localStorage.getItem(mp));
-        const dataSp = JSON.parse(localStorage.getItem(sp));
-        let res = `${dataSp ?
-            `${sp} :X-${dataSp.X}, O-${dataSp.O}` :
-            `${sp} :${emptyData}`}`;
-        res += `${dataMp ?
-            `${mp} :X-${dataMp.X}, O-${dataMp.O}` :
-            `${mp} :${emptyData}`}`;
-    }
-
     onRemove() {
         localStorage.removeItem("SinglePlayer");
         localStorage.removeItem("MultyPlayer");
