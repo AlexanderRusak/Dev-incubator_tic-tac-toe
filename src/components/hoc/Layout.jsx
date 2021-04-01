@@ -27,16 +27,7 @@ export default class Layout extends Component {
 
 
     }
-    /*     getLSdata = (key) => {
-            return JSON.parse(localStorage.getItem(key));
-        }
-        getTemplateData = (name, data) => {
-            const emptyData = "X-0, O-0";
-    
-            return `${data ?
-                `${name} :X-${data.X}, O-${data.O}` :
-                `${name} :${emptyData}`}`;
-        } */
+
 
     getTemplate() {
         const sp = "SinglePlayer";

@@ -62,9 +62,9 @@ export default class Game extends Component {
             console.log(squares.find(square => square === null) === null);
             if (squares.find(square => square === null) === null) {
                 while (squares[move] !== null || squares[move] === "X") {
-                    console.log(move);
+
                     move = this.moveClickAI();
-                    console.log(move);
+
                 }
                 squares[move] = 'O';
             }
@@ -97,7 +97,6 @@ export default class Game extends Component {
     }
 
     moveClickAI() {
-        console.log(Math.floor(Math.random() * (8 - 0 + 1)) + 0, "move rnd");
         return Math.floor(Math.random() * (8 - 0 + 1)) + 0;
     }
 
@@ -106,9 +105,11 @@ export default class Game extends Component {
             [0, 1, 2],
             [3, 4, 5],
             [6, 7, 8],
+
             [0, 3, 6],
             [1, 4, 7],
             [2, 5, 8],
+
             [0, 4, 8],
             [2, 4, 6],
         ];
@@ -131,18 +132,18 @@ export default class Game extends Component {
         localStorage.removeItem("MultyPlayer");
         alert("Data successfully erased");
     }
+
     setScoreResult(winner) {
         const { mode } = this.state;
-        const modeKey = mode === 0 ? "SinglePlayer" : "MultyPlayer";
+        const modeKey = mode === 0 ? "SinglePlayer" : "MultiPlayer";
         let getLSData = JSON.parse(localStorage.getItem(modeKey));
-        console.log(getLSData);
 
         if (!getLSData) {
             localStorage.setItem(modeKey, JSON.stringify({ X: winner === "X" ? 1 : 0, O: winner === "O" ? 1 : 0 }));
         } else {
-            console.log(getLSData[winner]);
+
             getLSData[winner]++;
-            console.log(getLSData[winner]);
+
             localStorage.setItem(modeKey, JSON.stringify(getLSData));
         }
 
@@ -165,6 +166,10 @@ export default class Game extends Component {
         }
     }
 
+    history(move) {
+        return () => this.historyButtons(move);
+    }
+    
     render() {
         const { mode, history, stepNumber, moveCount, winner } = this.state;
         const current = history[stepNumber];
@@ -175,7 +180,7 @@ export default class Game extends Component {
         let status;
         if (winner) {
             status = 'Win ' + winner;
-        } else if (squares.find(square => square === null) !== null && !winner) {
+        } else if (squares.find(square => square === null) !== null && !winner) { //////reverse coding
             status = "Round draw";
         }
         else {
@@ -191,8 +196,8 @@ export default class Game extends Component {
 
                 <div >
                     <div className={classes.moves}>
-                        <button disabled={moveCount === 0} onClick={() => this.historyButtons(moveCount - 1)}><i className="fas fa-undo"></i></button>
-                        <button disabled={moveCount === 0} onClick={() => this.resetHandler()}><i className="far fa-times-circle"></i></button>
+                        <button disabled={moveCount === 0} onClick={this.history(moveCount - 1)}><i className="fas fa-undo"></i></button>
+                        <button disabled={moveCount === 0} onClick={this.resetHandler}><i className="far fa-times-circle"></i></button>
                         <button disabled={stepNumber >= history.length - 1} onClick={() => this.historyButtons(moveCount + 1)} ><i className="fas fa-redo"></i></button>
                     </div>
                     <Board
@@ -208,3 +213,7 @@ export default class Game extends Component {
         )
     }
 }
+
+
+
+///HOF
