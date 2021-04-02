@@ -1,11 +1,10 @@
-import { Fragment } from 'react';
+import React from 'react';
 import './App.css';
+import Layout from './components/hoc/Layout';
 
 function App() {
   return (
-   <Fragment>
-     <h1>111</h1>
-   </Fragment>
+    <Layout />
   );
 }
 
